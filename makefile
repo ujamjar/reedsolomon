@@ -8,6 +8,10 @@ all:
 	ocamlbuild -use-ocamlfind reedsolomon.cma
 	ocamlbuild -use-ocamlfind reedsolomon.cmxa
 
+web:
+	ocamlbuild -use-ocamlfind rswebdemo.byte
+	js_of_ocaml rswebdemo.byte
+
 install: all uninstall
 	ocamlfind install reedsolomon META $(MLI) $(CMI) \
 	_build/ops.cmti _build/poly.cmti _build/matrix.cmti _build/galois.cmti _build/rs.cmti \
