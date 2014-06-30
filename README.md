@@ -1,6 +1,8 @@
 reedsolomon
 ===========
 
+[![Build Status](https://travis-ci.org/ujamjar/reedsolomon.svg?branch=master)](https://travis-ci.org/ujamjar/reedsolomon)
+
 Reed-Solomon Error Correction CODEC in OCaml.
 
 The code is written at a very high level and uses concepts such 
