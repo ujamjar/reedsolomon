@@ -1,0 +1,11 @@
+# OASIS_START
+# DO NOT EDIT (digest: bb71e87d175c3cd3278f386eb039631b)
+version = "1.1"
+description = "Reed-Solomon error correction CODEC"
+archive(byte) = "Reedsolomon.cma"
+archive(byte, plugin) = "Reedsolomon.cma"
+archive(native) = "Reedsolomon.cmxa"
+archive(native, plugin) = "Reedsolomon.cmxs"
+exists_if = "Reedsolomon.cma"
+# OASIS_STOP
+

@@ -1,5 +1,24 @@
-<webdemo/rswebdemo.ml>: syntax(camlp4o), package(js_of_ocaml.syntax,hardcaml)
-<webdemo/rswebdemo.byte>: package(js_of_ocaml,hardcaml)
-
-true: bin_annot
-<webdemo>: include
+# OASIS_START
+# DO NOT EDIT (digest: c22a72c93869b4c727ca8678826fc3c6)
+# Ignore VCS directories, you can use the same kind of rule outside
+# OASIS_START/STOP if you want to exclude directories that contains
+# useless stuff for the build process
+true: annot, bin_annot
+<**/.svn>: -traverse
+<**/.svn>: not_hygienic
+".bzr": -traverse
+".bzr": not_hygienic
+".hg": -traverse
+".hg": not_hygienic
+".git": -traverse
+".git": not_hygienic
+"_darcs": -traverse
+"_darcs": not_hygienic
+# Library Reedsolomon
+"src/Reedsolomon.cmxs": use_Reedsolomon
+"src/ops.cmx": for-pack(Reedsolomon)
+"src/matrix.cmx": for-pack(Reedsolomon)
+"src/poly.cmx": for-pack(Reedsolomon)
+"src/galois.cmx": for-pack(Reedsolomon)
+"src/rs.cmx": for-pack(Reedsolomon)
+# OASIS_STOP
