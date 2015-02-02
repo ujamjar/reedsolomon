@@ -14,7 +14,7 @@ web:
 
 install: all uninstall
 	ocamlfind install reedsolomon META $(MLI) $(CMI) \
-	_build/ops.cmti _build/poly.cmti _build/matrix.cmti _build/galois.cmti _build/rs.cmti \
+		_build/ops.cmti _build/poly.cmti _build/matrix.cmti _build/galois.cmti _build/rs.cmti \
 		_build/reedsolomon.cma _build/reedsolomon.cmxa _build/reedsolomon.a
 
 uninstall:

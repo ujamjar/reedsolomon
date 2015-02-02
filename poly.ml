@@ -154,7 +154,7 @@ module Make(E : Ops.OpsBase) = struct
             (try trim (Array.init (degree a + b + 1) (fun i -> a.(i-b)))
             with _ -> zero)
         else if b=0 then trim a
-        else trim (Array.concat [ Array.create b E.zero; a ])
+        else trim (Array.concat [ Array.make b E.zero; a ])
 
     (* scale poly *)
     let mul_scalar a b = trim (Array.map E.(fun a -> a *: b) a)

@@ -231,9 +231,9 @@ module MakePoly(G : Galois.Table.Ops)(P : RsParams) = struct
 
         let iBM = 
             let z,o = G.zero, G.one in
-            let lambda = Array.create (t+1) z in
-            let lambda' = Array.create (t+1) z in
-            let b = Array.create (t+1) z in
+            let lambda = Array.make (t+1) z in
+            let lambda' = Array.make (t+1) z in
+            let b = Array.make (t+1) z in
             let k = ref 0 in
             let gamma = ref o in
             let delta = ref z in
@@ -279,12 +279,12 @@ module MakePoly(G : Galois.Table.Ops)(P : RsParams) = struct
 
         let riBM = 
             let z,o = G.zero, G.one in
-            let lambda = Array.create (t+1) z in
-            let lambda' = Array.create (t+1) z in
-            let b = Array.create (t+1) z in
-            let delta = Array.create (2*t) z in
-            let delta' = Array.create (2*t) z in
-            let theta = Array.create (2*t) z in
+            let lambda = Array.make (t+1) z in
+            let lambda' = Array.make (t+1) z in
+            let b = Array.make (t+1) z in
+            let delta = Array.make (2*t) z in
+            let delta' = Array.make (2*t) z in
+            let theta = Array.make (2*t) z in
             let gamma = ref o in
             let k = ref 0 in
 
@@ -334,9 +334,9 @@ module MakePoly(G : Galois.Table.Ops)(P : RsParams) = struct
 
         let rriBM = 
             let z,o = G.zero, G.one in
-            let delta = Array.create (3*t+1) z in
-            let delta' = Array.create (3*t+1) z in
-            let theta = Array.create (3*t+1) z in
+            let delta = Array.make (3*t+1) z in
+            let delta' = Array.make (3*t+1) z in
+            let theta = Array.make (3*t+1) z in
             let gamma = ref o in
             let k = ref 0 in
 
