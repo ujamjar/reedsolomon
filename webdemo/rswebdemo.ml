@@ -2,7 +2,7 @@
 (*open Html_utils*)
 (*open UJamJar*)
 open HardCaml
-open Rs
+open Reedsolomon
 module D = Dom_html
 module B = Bits.Comb.IntbitsList
 
@@ -170,7 +170,7 @@ module Gen(P : Params) = struct
     
     let constg n = G.(zero +: (Array.of_list (List.rev (B.consti P.m n))))
 
-    module Rs = Rs.MakePoly(G)(P)
+    module Rs = Reedsolomon.Codec.MakePoly(G)(P)
 
     (***********************************************************************)
 

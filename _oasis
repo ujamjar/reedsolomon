@@ -15,11 +15,16 @@ Library Reedsolomon
   Path:          src
   Findlibname:   reedsolomon
   Pack:          true
-  Modules:       Ops, Matrix, Poly, Galois, Rs
+  Modules:       Ops, Matrix, Poly, Galois, Codec
   BuildDepends:  
   XMETARequires: 
 
-Executable wavedraw
+Flag webdemo
+  Description: Build the web demo (requires hardcaml)
+  Default: false
+
+Executable rswebdemo
+  Build$:             flag(webdemo)
   Path:               webdemo
   MainIs:             rswebdemo.ml
   Custom:             true
