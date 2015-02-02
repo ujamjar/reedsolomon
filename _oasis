@@ -19,6 +19,14 @@ Library Reedsolomon
   BuildDepends:  
   XMETARequires: 
 
+Executable wavedraw
+  Path:               webdemo
+  MainIs:             rswebdemo.ml
+  Custom:             true
+  CompiledObject:     byte
+  Install:            false
+  BuildDepends:       reedsolomon,hardcaml,js_of_ocaml,js_of_ocaml.syntax
+
 SourceRepository master
   Type:     git
   Location: https://github.com/ujamjar/reedsolomon.git

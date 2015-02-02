@@ -1,5 +1,0 @@
-version = "1.0"
-description = "Reed-Solomon CODEC"
-archive(byte) = "reedsolomon.cma"
-archive(native) = "reedsolomon.cmxa"
-
