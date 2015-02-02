@@ -1,0 +1,25 @@
+OASISFormat: 0.4
+Name:        reedsolomon
+Version:     1.1
+Synopsis:    Reed-Solomon error correction CODEC
+Description: Correct up to t symbol errors
+
+Authors:     Andy Ray
+Maintainers: Andy Ray <andy.ray@unjamjar.org>
+Homepage:    https://github.com/ujamjar/reedsolomon
+License:     ISC
+Plugins:     META (0.4)
+BuildTools:  ocamlbuild
+
+Library Reedsolomon
+  Path:          src
+  Findlibname:   reedsolomon
+  Pack:          true
+  Modules:       Ops, Matrix, Poly, Galois, Rs
+  BuildDepends:  
+  XMETARequires: 
+
+SourceRepository master
+  Type:     git
+  Location: https://github.com/ujamjar/reedsolomon.git
+  Browser:  https://github.com/ujamjar/reedsolomon
