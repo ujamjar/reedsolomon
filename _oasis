@@ -1,6 +1,6 @@
 OASISFormat: 0.4
 Name:        reedsolomon
-Version:     1.1
+Version:     0.1
 Synopsis:    Reed-Solomon error correction CODEC
 Description: Correct up to t symbol errors
 
