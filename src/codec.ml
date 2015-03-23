@@ -77,7 +77,7 @@ module type RsPoly = sig
   val decode_erasures : poly -> int list -> poly
 
   val decode_errors_and_erasures_euclid : poly -> int list -> poly
-  val decode_errors_and_erasures_berlekamp_massey : poly -> int list -> poly
+  (*val decode_errors_and_erasures_berlekamp_massey : poly -> int list -> poly*)
   val decode_errors_and_erasures : poly -> int list -> poly
 end
 

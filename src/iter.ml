@@ -1,5 +1,3 @@
-open Reedsolomon (* delete me! *)
-
 (* 
  * reedsolomon - error correction CODEC
  *
@@ -9,15 +7,6 @@ open Reedsolomon (* delete me! *)
  * Description: 
  *
  *)
-
-(* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX *)
-(* NOT COMPLETE.
- *
- * This is intended to be a fast path version of the code
- * which might actually be useful *)
-(* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX *)
-
-(* GF(2^m), n=2^m-1 (may be shortened), k=n-2t *)
 
 type rsparams = {
   m : int; (* bits per symbol *)
@@ -44,32 +33,7 @@ type rscodec = {
   decode : rspoly -> rspoly -> int;
 }
 
-(************************************************************)
-(* test stuff *)
-let bbc = 
-  {
-    m = 4;
-    k = 11;
-    t = 2;
-    n = 15;
-    b = 0;
-    prim_poly = 19;
-    prim_elt = 2;
-  }
-
-module Gp = struct
-  let pp = 19
-  let pe = 2
-end 
-module Rp = struct
-  let t = 2
-  let k = 11
-  let b = 0
-end 
-module R = Codec.MakeStandard(Gp)(Rp) 
-(************************************************************)
-
-let rscodec p = 
+let init p = 
 
   (* generate the reference implementation *)
   let module Gp = struct
@@ -221,7 +185,8 @@ let rscodec p =
       for i=0 to !n_errors-1 do
          let x' = G.antilog error_locs.(i) in
          let x =  G.(x' **: (p.b+t2-1)) in
-         error_magnitudes.(i) <- G.(x *: (rhorner x' delta /: rhorner x' lambda'))
+         let x2 = G.(x' **: 2) in
+         error_magnitudes.(i) <- G.(x *: (rhorner x' delta /: rhorner x2 lambda'))
       done
     in
 
@@ -233,6 +198,14 @@ let rscodec p =
         c.(loc) <- G.(c.(loc) +: mag)
       done
     in
+
+    (*let dump a = 
+      let open Printf in
+      for i=0 to Array.length a - 1 do
+        printf "%i " a.(i)
+      done;
+      printf "\n"
+    in*)
 
     let ssum = ref G.zero in
     (fun received corrected -> 
@@ -258,24 +231,3 @@ let rscodec p =
   { params=p; encode; decode }
 
 
-let rs = rscodec bbc
-let data = [|1;2;3;4;5;6;7;8;9;10;11|]
-let parity = rspoly (2*bbc.t)
-let () = rs.encode data parity
-
-let codeword = Array.concat [data;parity]
-let received = Array.mapi 
-    R.G.(fun i x ->
-        if i=5 then 13 +: x
-        else if i=12 then 2 +: x
-        else x) codeword
-
-let corrected= rspoly bbc.n
-let delta, lambda, error_locs, error_magnitudes, n_errors = rs.decode received corrected
-
-let test (el,ev) = 
-  let received = Array.mapi 
-    R.G.(fun i x -> if i=el then ev +: x else x) codeword
-  in
-  let _,_,_,_,ne = rs.decode received corrected in
-  ne, corrected

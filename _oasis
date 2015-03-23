@@ -15,7 +15,7 @@ Library Reedsolomon
   Path:          src
   Findlibname:   reedsolomon
   Pack:          true
-  Modules:       Ops, Matrix, Poly, Galois, Codec
+  Modules:       Ops, Matrix, Poly, Galois, Codec, Iter
   BuildDepends:  
   XMETARequires: 
 
@@ -31,6 +31,14 @@ Executable rswebdemo
   CompiledObject:     byte
   Install:            false
   BuildDepends:       reedsolomon,hardcaml,js_of_ocaml,js_of_ocaml.syntax
+
+Executable test_iter
+  Path:               test
+  MainIs:             test_iter.ml
+  Custom:             true
+  CompiledObject:     best
+  Install:            false
+  BuildDepends:       reedsolomon, unix
 
 SourceRepository master
   Type:     git

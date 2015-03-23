@@ -25,8 +25,8 @@ val rspoly : int -> rspoly
 type rscodec = {
   params : rsparams;
   encode : rspoly -> rspoly -> unit;
-  decode : rspoly -> rspoly -> unit;
+  decode : rspoly -> rspoly -> int;
 }
 
-val rscodec : rsparams -> rscodec
+val init : rsparams -> rscodec
 

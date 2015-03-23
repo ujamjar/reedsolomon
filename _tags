@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: aeee9e3ad8b0140f31655e28e281a144)
+# DO NOT EDIT (digest: 5c17adb0f31a73f3d4f74b256478034c)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -21,6 +21,7 @@ true: annot, bin_annot
 "src/poly.cmx": for-pack(Reedsolomon)
 "src/galois.cmx": for-pack(Reedsolomon)
 "src/codec.cmx": for-pack(Reedsolomon)
+"src/iter.cmx": for-pack(Reedsolomon)
 # Executable rswebdemo
 "webdemo/rswebdemo.byte": pkg_hardcaml
 "webdemo/rswebdemo.byte": pkg_js_of_ocaml
@@ -31,4 +32,10 @@ true: annot, bin_annot
 <webdemo/*.ml{,i,y}>: pkg_js_of_ocaml.syntax
 <webdemo/*.ml{,i,y}>: use_Reedsolomon
 "webdemo/rswebdemo.byte": custom
+# Executable test_iter
+<test/test_iter.{native,byte}>: pkg_unix
+<test/test_iter.{native,byte}>: use_Reedsolomon
+<test/*.ml{,i,y}>: pkg_unix
+<test/*.ml{,i,y}>: use_Reedsolomon
+<test/test_iter.{native,byte}>: custom
 # OASIS_STOP
