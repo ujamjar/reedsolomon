@@ -12,7 +12,7 @@
 
 BUILD_OPTS=
 
-WEBDEMO ?= $(shell if ocamlfind query hardcaml >/dev/null 2>&1; then echo --enable-webdemo; fi)
+WEBDEMO ?= $(shell if ocamlfind query hardcaml js_of_ocaml >/dev/null 2>&1; then echo --enable-webdemo; fi)
 
 all: setup.data
 	ocaml setup.ml -build
