@@ -50,12 +50,12 @@ let init p =
 
   (* array utilities *)
   let len = Array.length in
-  let clear a = for i=0 to len a - 1 do a.(i) <- 0 done in
-  let get a i = if i < 0 then G.zero else if i >= len a then G.zero else a.(i) in
-  let iteri a f = for i=0 to len a - 1 do a.(i) <- f i done in
-  let copy t f = for i=0 to len t - 1 do t.(i) <- f.(i) done in
-  let shiftup a b = for i=len a - 1 downto 0 do a.(i) <- get a (i-1) done in
-  let shiftdown a b = for i=0 to len a - 1 do a.(i) <- get b (i+1) done in
+  let clear (a: int array) = for i=0 to len a - 1 do a.(i) <- 0 done in
+  let get (a: int array) i = if i < 0 then G.zero else if i >= len a then G.zero else a.(i) in
+  let iteri (a: int array) (f : int -> int) = for i=0 to len a - 1 do a.(i) <- f i done in
+  let copy (t: int array) (f:int array) = for i=0 to len t - 1 do t.(i) <- f.(i) done in
+  let shiftup (a: int array) (b: int array) = for i=len a - 1 downto 0 do a.(i) <- get a (i-1) done in
+  let shiftdown (a: int array) (b: int array) = for i=0 to len a - 1 do a.(i) <- get b (i+1) done in
 
   let encode = 
     let t2 = 2 * p.t in

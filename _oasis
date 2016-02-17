@@ -5,7 +5,7 @@ Synopsis:    Reed-Solomon error correction CODEC
 Description: Correct up to t symbol errors
 
 Authors:     Andy Ray
-Maintainers: Andy Ray <andy.ray@unjamjar.org>
+Maintainers: Andy Ray <andy.ray@ujamjar.com>
 Homepage:    https://github.com/ujamjar/reedsolomon
 License:     ISC
 Plugins:     META (0.4)
@@ -16,6 +16,7 @@ Library Reedsolomon
   Findlibname:   reedsolomon
   Pack:          true
   Modules:       Ops, Matrix, Poly, Galois, Codec, Iter
+  NativeOpt:     -unsafe
   BuildDepends:  
   XMETARequires: 
 
@@ -30,6 +31,7 @@ Executable rswebdemo
   Custom:             true
   CompiledObject:     byte
   Install:            false
+  NativeOpt:          -unsafe
   BuildDepends:       reedsolomon,hardcaml,js_of_ocaml,js_of_ocaml.syntax
 
 Executable test_iter

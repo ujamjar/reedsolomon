@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: bdb9f1a7d3bf4a07accaf11fa9f8a74d) *)
+(* DO NOT EDIT (digest: fe182f5fc9f465a5e9a2dbf99ce4df5e) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -609,7 +609,28 @@ let package_default =
   {
      MyOCamlbuildBase.lib_ocaml = [("Reedsolomon", ["src"], [])];
      lib_c = [];
-     flags = [];
+     flags =
+       [
+          (["oasis_library_reedsolomon_native"; "ocaml"; "link"; "native"],
+            [(OASISExpr.EBool true, S [A "-unsafe"])]);
+          (["oasis_library_reedsolomon_native"; "ocaml"; "ocamldep"; "native"
+           ],
+            [(OASISExpr.EBool true, S [A "-unsafe"])]);
+          (["oasis_library_reedsolomon_native"; "ocaml"; "compile"; "native"],
+            [(OASISExpr.EBool true, S [A "-unsafe"])]);
+          (["oasis_executable_rswebdemo_native"; "ocaml"; "link"; "native"],
+            [(OASISExpr.EBool true, S [A "-unsafe"])]);
+          ([
+              "oasis_executable_rswebdemo_native";
+              "ocaml";
+              "ocamldep";
+              "native"
+           ],
+            [(OASISExpr.EBool true, S [A "-unsafe"])]);
+          (["oasis_executable_rswebdemo_native"; "ocaml"; "compile"; "native"
+           ],
+            [(OASISExpr.EBool true, S [A "-unsafe"])])
+       ];
      includes = [("webdemo", ["src"]); ("test", ["src"])]
   }
   ;;
@@ -618,6 +639,6 @@ let conf = {MyOCamlbuildFindlib.no_automatic_syntax = false}
 
 let dispatch_default = MyOCamlbuildBase.dispatch_default conf package_default;;
 
-# 622 "myocamlbuild.ml"
+# 643 "myocamlbuild.ml"
 (* OASIS_STOP *)
 Ocamlbuild_plugin.dispatch dispatch_default;;
