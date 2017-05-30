@@ -8,34 +8,25 @@
 #
 ########################################
 
-.PHONY: clean all install uninstall 
+.PHONY: clean all install uninstall rswebdemo
 
 BUILD_OPTS=
 
 WEBDEMO ?= $(shell if ocamlfind query hardcaml js_of_ocaml >/dev/null 2>&1; then echo --enable-webdemo; fi)
 
-all: setup.data
-	ocaml setup.ml -build
-
-setup.ml:
-	oasis setup
-
-setup.data: setup.ml
-	ocaml setup.ml -configure $(WEBDEMO)
+all: 
+	jbuilder build @install
 
 install: all
-	ocaml setup.ml -install
+	jbuilder install
 
 uninstall: 
-	ocamlfind remove reedsolomon
+	jbuilder uninstall
 
 rswebdemo: all
-	js_of_ocaml +nat.js rswebdemo.byte
+	jbuilder build webdemo/rswebdemo.bc.js
 
 clean:
-	ocaml setup.ml -clean
-	- rm -f rswebdemo.js
-	- find . -name "*~" | xargs rm
+	rm -fr _build
+	find . -name "*~" | xargs rm
 
-distclean: clean
-	- rm -f setup.data setup.log

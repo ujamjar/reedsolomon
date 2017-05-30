@@ -1,15 +1,37 @@
-(* Reed-Solomon tutorial *)
-(*open Html_utils*)
-(*open UJamJar*)
-open HardCaml
+(* Reed-Solomon web tutorial *)
 open Reedsolomon
 module D = Dom_html
-module B = Bits.Comb.IntbitsList
+
+let rec nbits x = 
+  if x < 0 then failwith "arg to clog2 must be >= 0";
+  match x with 0 | 1 -> 1 | x -> 1 + (nbits (x/2)) 
+
+module B = struct
+  (* copied from hardcaml - could be much more efficient (but it doesnt matter *)
+  let constb v = 
+    let to_int = function '0' -> 0 | '1' -> 1 | _ -> failwith "invalid constant" in
+    let len = String.length v in
+    let rec const b i = 
+      if len = i then b 
+      else const (to_int v.[i] :: b) (i+1)
+    in
+    List.rev (const [] 0)
+  let bstr_of_int w d = 
+    let rec b i d =
+      if i = w then ""
+        else b (i+1) (d asr 1) ^ (if d land 1 = 1 then "1" else "0")
+    in
+    b 0 d
+  let consti l v = constb (bstr_of_int l v) 
+  let consti b v = []
+  let to_int x = List.fold_left (fun acc x -> (acc * 2) + x) 0 x
+
+end
 
 (***********************************************************************)
 
 let debug = true
-let jlog s = if debug then Firebug.console##log(s)
+let jlog s = if debug then Firebug.console##(log s)
 let log s = if debug then jlog (Js.string s)
 
 let ostr = Js.to_string
@@ -19,13 +41,13 @@ let jstri x = jstr (string_of_int x)
 let get_element e = 
     let d = D.document in
     Js.Opt.get 
-        (d##getElementById (Js.string ("jsoo_" ^ e)))
+        (d##(getElementById (Js.string ("jsoo_" ^ e))))
         (fun () -> 
           log ("get_element failed: " ^ e);
           assert false)
 
 let rec delete_kids par = 
-    let kid = par##firstChild in
+    let kid = par##.firstChild in
     match Js.Opt.to_option kid with
     | Some(kid) ->  begin
         Dom.removeChild par kid;
@@ -49,10 +71,10 @@ let mk_table border n_rows n_cols f =
         for col=0 to n_cols-1 do
             let telt = D.createTd d in
             if (border row col) then begin
-                let style = telt##style in
-                style##borderStyle <- Js.string "solid";
-                style##borderWidth <- Js.string "1px";
-                style##borderColor <- Js.string "#d0d0d0";
+                let style = telt##.style in
+                style##.borderStyle := Js.string "solid";
+                style##.borderWidth := Js.string "1px";
+                style##.borderColor := Js.string "#d0d0d0";
             end;
             Dom.appendChild telt (f row col);
             Dom.appendChild trow telt
@@ -64,8 +86,8 @@ let mk_table border n_rows n_cols f =
 let mk_p ?(className="js_para") s = 
     let d = D.document in
     let t = D.createP d in
-    t##className <- Js.string className;
-    t##innerHTML <- Js.string s;
+    t##.className := Js.string className;
+    t##.innerHTML := Js.string s;
     t
 
 (* XXX this is a bit yukky...
@@ -75,8 +97,8 @@ let mk_p ?(className="js_para") s =
  * I dont know how to detect when its empty - the old way
  * of checking against 'no_handler' worked in chrome but not firefox *)
 let install_window_onload h = 
-    let o = D.window##onload in
-    D.window##onload <- D.handler (fun e ->
+    let o = D.window##.onload in
+    D.window##.onload := D.handler (fun e ->
         let safe_invoke h =
             try ignore(D.invoke_handler h D.window e)
             with _ -> log "safe_invoke failed"
@@ -91,7 +113,7 @@ let install_window_onload h =
 class type jq_math = object('self)
     method parseMath : Dom_html.element Js.t -> unit Js.meth
 end
-let math : jq_math Js.t = (Js.Unsafe.variable "window")##_M
+let math : jq_math Js.t = (Js.Unsafe.variable "window")##._M
 
 
 (***********************************************************************)
@@ -108,7 +130,7 @@ module type Params = sig
     val ud : bool
 end
 
-let value name = (get_input name)##value 
+let value name = (get_input name)##.value 
 let int_value name = int_of_string (ostr (value name)) 
 
 let get_m () = int_value "param_m"
@@ -120,10 +142,10 @@ let get_b () = int_value "param_b"
 let get_n () = (1 lsl (get_m())) - 1
 let get_k () = get_n() - (get_t() * 2)
 
-let get_dec () = Js.to_bool (get_input "show_decimal")##checked
-let get_ud () = Js.to_bool (get_input "up_down")##checked
+let get_dec () = Js.to_bool (get_input "show_decimal")##.checked
+let get_ud () = Js.to_bool (get_input "up_down")##.checked
 
-let set_int_value name x = (get_input name)##value <- jstr (string_of_int x)
+let set_int_value name x = (get_input name)##.value := jstr (string_of_int x)
 
 let set_pp = set_int_value "param_pp"
 let set_pe = set_int_value "param_pe"
@@ -150,8 +172,8 @@ let mk_params () =
 
 module Gen(P : Params) = struct
 
-    let prim_poly = Array.of_list (List.rev (B.consti (Utils.nbits P.pp) P.pp)) 
-    let prim_elt = Array.of_list (List.rev (B.consti (Utils.nbits P.pe) P.pe)) 
+    let prim_poly = Array.of_list (List.rev (B.consti (nbits P.pp) P.pp)) 
+    let prim_elt = Array.of_list (List.rev (B.consti (nbits P.pe) P.pe)) 
 
     module G' = Galois.Table.Make(struct
         module Ops = Galois.Extension.Make(struct
@@ -240,7 +262,7 @@ module Gen(P : Params) = struct
         let div = get_element name in
         delete_kids div;
         Dom.appendChild div (mk_p (jqwrap str));
-        math##parseMath(div)
+        math##(parseMath div)
 
     (***********************************************************************)
 
@@ -364,14 +386,14 @@ end
 (***********************************************************************)
 
 let hide_galois_field _ = 
-    (get_element "show_galois_field_div")##style##display <- jstr "none";
+    (get_element "show_galois_field_div")##.style##.display := jstr "none";
     Js._false
 
 let toggle_galois_field _ = 
     let module X = Gen( (val (mk_params ()) : Params) ) in
     let open X in
     let box = get_element "show_galois_field_div" in
-    if box##style##display = jstr "block" then begin
+    if box##.style##.display = jstr "block" then begin
         hide_galois_field ()
     end else begin
         jqmath_elt "prim_poly" (jqmath_of_gf prim_poly);
@@ -385,7 +407,7 @@ let toggle_galois_field _ =
         in
         let s = "\\table " ^ Array.fold_left (^) "" p in
         jqmath_elt "galois_field" s;
-        (get_element "show_galois_field_div")##style##display <- jstr "block";
+        (get_element "show_galois_field_div")##.style##.display := jstr "block";
         Js._false
     end
 
@@ -394,13 +416,13 @@ let toggle_galois_field _ =
 (* number input cell *)
 let mk_num_input id = 
     let i = D.createInput ~_type:(jstr "text") D.document in
-    i##id <-jstr id;
-    i##maxLength <- 4;
-    i##size <- 4;
-    i##value <- jstr "0";
-    i##onkeypress <- D.handler (fun e -> 
+    i##.id :=jstr id;
+    i##.maxLength := 4;
+    i##.size := 4;
+    i##.value := jstr "0";
+    i##.onkeypress := D.handler (fun e -> 
         (* only allow numbers *)
-        let cc = e##charCode in
+        let cc = e##.charCode in
         match Js.Optdef.to_option cc with
         | None -> Js._true
         | Some(cc) -> 
@@ -424,7 +446,7 @@ let mk_table_data n d =
         d.data := Array.init n 
             (fun i -> 
                 let inp = mk_num_input (d.name ^ string_of_int i) in
-                inp##value <- (try !(d.data).(i)##value with _ -> jstr "0");
+                inp##.value := (try !(d.data).(i)##.value with _ -> jstr "0");
                 inp);
         let table = mk_table (fun _ _ -> false) ((n+7)/8) 8 (fun r c ->
             let i = (r*8)+c in
@@ -438,11 +460,11 @@ let mk_table_data n d =
 
 let set_table_data table data = 
     mk_table_data (Array.length data) table;
-    Array.iteri (fun x i -> i##value <- jstr (string_of_int data.(x)))
+    Array.iteri (fun x i -> i##.value := jstr (string_of_int data.(x)))
         !(table.data)
 
 let get_table_data table = 
-    Array.map (fun i -> int_of_string (ostr (i##value))) !(table.data)
+    Array.map (fun i -> int_of_string (ostr (i##.value))) !(table.data)
 
 let read_data () = 
     get_table_data message_data, get_table_data error_data
@@ -505,19 +527,19 @@ let onload _ =
     set_table_data message_data d;
     set_table_data error_data e;
 
-    (get_element "show_galois_field")##onclick <- 
+    (get_element "show_galois_field")##.onclick := 
         D.handler toggle_galois_field;
 
-    (get_element "random_message")##onclick <- 
+    (get_element "random_message")##.onclick := 
         D.handler (init_table message_data (fun n _ _ -> Random.int (n+1)));
 
-    (get_element "random_errors")##onclick <- 
+    (get_element "random_errors")##.onclick := 
         D.handler (init_table error_data 
             (fun n t _ -> if Random.int n <= t then (Random.int n)+1 else 0));
 
-    (get_element "clear_message")##onclick <- 
+    (get_element "clear_message")##.onclick := 
         D.handler (init_table message_data (fun _ _ _ -> 0));
-    (get_element "clear_errors")##onclick <- 
+    (get_element "clear_errors")##.onclick := 
         D.handler (init_table error_data (fun _ _ _ -> 0));
 
     let handlers l = (* run multiple handlers *)
@@ -525,15 +547,15 @@ let onload _ =
     in
     ignore (derived_params());
 
-    (get_input "param_m")##onchange <- handlers
+    (get_input "param_m")##.onchange := handlers
         [update_tables; hide_galois_field; select_poly; derived_params];
-    (get_input "param_t")##onchange <- handlers 
+    (get_input "param_t")##.onchange := handlers 
         [update_tables; derived_params];
 
-    (get_input "param_pp")##onchange <- D.handler hide_galois_field;
-    (get_input "param_pe")##onchange <- D.handler hide_galois_field;
+    (get_input "param_pp")##.onchange := D.handler hide_galois_field;
+    (get_input "param_pe")##.onchange := D.handler hide_galois_field;
 
-    (get_element "calculate_rs")##onclick <- D.handler run_rs;
+    (get_element "calculate_rs")##.onclick := D.handler run_rs;
 
     ignore (run_rs());
 

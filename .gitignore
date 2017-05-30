@@ -3,3 +3,5 @@ _build
 .*.swp
 *.js
 *.byte
+.merlin
+*.install
