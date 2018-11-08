@@ -1,4 +1,0 @@
-(library 
- ((name reedsolomon)
-  (public_name reedsolomon)))
-

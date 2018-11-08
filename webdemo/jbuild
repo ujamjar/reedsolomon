@@ -1,6 +1,0 @@
-(executable
- ((name rswebdemo)
-  (libraries (reedsolomon js_of_ocaml))
-  (js_of_ocaml 
-   ((flags (+nat.js))))
-  (preprocess (pps (js_of_ocaml-ppx)))))

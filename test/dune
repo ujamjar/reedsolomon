@@ -1,0 +1,4 @@
+(executable
+ (name test_iter)
+ (flags (:standard -w -27-35))
+ (libraries reedsolomon unix))
