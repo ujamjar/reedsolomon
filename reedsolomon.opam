@@ -1,19 +1,23 @@
-opam-version: "1.2"
-maintainer: "andy.ray@ujamjar.com"
-homepage: "https://github.com/ujamjar/reedsolomon"
-authors: "andy.ray@ujamjar.com"
-dev-repo: "https://github.com/ujamjar/reedsolomon"
-bug-reports: "https://github.com/ujamjar/reedsolomon/issues"
+opam-version: "2.0"
+name:         "reedsolomon"
+maintainer:   "Andy Ray <andy.ray@ujamjar.com>"
+authors:      "Andy Ray <andy.ray@ujamjar.com>"
+homepage:     "https://github.com/ujamjar/reedsolomon"
+bug-reports:  "https://github.com/ujamjar/reedsolomon/issues"
+dev-repo:     "git+https://github.com/ujamjar/reedsolomon.git"
+doc:          "https://github.com/ujamjar/reedsolomon"
+license:      "MIT"
+synopsis:     "Reed-Solomon Error Correction CODEC"
+
 build: [
-  [make "all"]
+  ["dune" "build" "-p" name "-j" jobs]
 ]
-install: [
-  [make "install"]
-]
-remove: [
-  [make "uninstall"]
-]
+
 depends: [
-  "ocamlfind"
+  "ocaml" {>= "4.02.0"}
+  "dune" {build}
 ]
-available: [ ocaml-version >= "4.02.0" ]
+url {
+  src: "https://github.com/ujamjar/reedsolomon/archive/v0.3.tar.gz"
+  checksum: "md5=d59a4bf6c65ec034e39685bad037eb4f"
+}
