@@ -1,30 +1,20 @@
-########################################
-# hardcaml - hardware design in OCaml
-#
-#   (c) 2014 MicroJamJar Ltd
-#
-# Author(s): andy.ray@ujamjar.com
-# Description: 
-#
-########################################
-
 .PHONY: clean all install uninstall rswebdemo
 
-BUILD_OPTS=
-
-WEBDEMO ?= $(shell if ocamlfind query hardcaml js_of_ocaml >/dev/null 2>&1; then echo --enable-webdemo; fi)
-
-all: 
+all:
 	jbuilder build @install
 
 install: all
 	jbuilder install
 
-uninstall: 
+uninstall:
 	jbuilder uninstall
 
 rswebdemo: all
 	jbuilder build webdemo/rswebdemo.bc.js
+
+test: all
+	jbuilder build test/test_iter.exe
+	./_build/default/test/test_iter.exe
 
 clean:
 	rm -fr _build

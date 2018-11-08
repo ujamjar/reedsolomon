@@ -1,8 +1,13 @@
-opam-version: "1.1"
+opam-version: "1.2"
 maintainer: "andy.ray@ujamjar.com"
 homepage: "https://github.com/ujamjar/reedsolomon"
+authors: "andy.ray@ujamjar.com"
+dev-repo: "https://github.com/ujamjar/reedsolomon"
+bug-reports: "https://github.com/ujamjar/reedsolomon/issues"
 build: [
   [make "all"]
+]
+install: [
   [make "install"]
 ]
 remove: [
@@ -11,4 +16,4 @@ remove: [
 depends: [
   "ocamlfind"
 ]
-ocaml-version: [ >= "4.00.1" ]
+available: [ ocaml-version >= "4.02.0" ]
