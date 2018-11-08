@@ -8,6 +8,7 @@ dev-repo:     "git+https://github.com/ujamjar/reedsolomon.git"
 doc:          "https://github.com/ujamjar/reedsolomon"
 license:      "MIT"
 synopsis:     "Reed-Solomon Error Correction CODEC"
+description:  "Reed-Solomon Error Coorection CODEC libaray."
 
 build: [
   ["dune" "build" "-p" name "-j" jobs]
